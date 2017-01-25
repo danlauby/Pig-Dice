@@ -76,7 +76,16 @@ function displayCompOutput(){
   $(".comp-output").append("<h1>The Computers turn total is: "+ totalObject.compTurnTotal + "</h1>").append("<h2> The Computers overall total is: " + totalObject.compTotal+"<h2>");
 }
 
-// function doTheRoll(){}
+function displayResult(){
+  $("button").hide();
+  $("#displayHolder").hide();
+  $(".win-holder").show();
+  if(totalObject.playerTotal>=100){
+    $(".player-wins").show();
+  }else if(totalObject.compTotal>=100){
+    $(".comp-wins").show();
+  }
+}
 
 $(function(){
   $("#btnRoll").click(function(){
@@ -87,18 +96,15 @@ $(function(){
   $("#btnHold").click(function(){
     endGame();
     if (endGame()===true) {
-      $("button").hide();
-      $("#displayHolder").hide();
-      $(".win-holder").show();
-      if(totalObject.playerTotal>=100){
-        $(".player-wins").show();
-      }else if(totalObject.compTotal>=100){
-        $(".comp-wins").show();
-      }
+      displayResult();
     }else if (endGame()===false){
-      console.log("stuff");
       displayPlayerOutput();
       easyCompRoll();
+
+      if (endGame()===true) {
+        displayResult();
+      }
+
       displayCompOutput();
     }
   });
