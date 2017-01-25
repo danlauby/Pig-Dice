@@ -14,19 +14,25 @@ function rolls(){
   return Math.round(Math.random() * (5) + 1);
 }
 
-var playerRoll = function(){
+var playerRoll = function(mode){
+  console.log("mode is: "+ mode);
+  var gameMode = mode;
   if(totalObject.playerTotal >= 100 || totalObject.compTotal >=100){
     endGame();
   }else {
-   var roll = rolls();
-   if(roll === 1){
-      totalObject.playerTurnTotal = 0;
-      endGame();
-      displayPlayerOutput();
-      easyCompRoll();
-   }else{
-      totalObject.playerTurnTotal += roll;
-    }
+      var roll = rolls();
+      if(roll === 1){
+        totalObject.playerTurnTotal = 0;
+        endGame();
+        displayPlayerOutput();
+        if (gameMode === 'hard') {
+          hardCompRoll();
+        } else {
+          easyCompRoll();
+        }
+      }else{
+        totalObject.playerTurnTotal += roll;
+      }
   }
 }
 
@@ -58,7 +64,7 @@ var hardCompRoll = function(){
     endGame();
   }else {
     var roll = rolls();
-    console.log("computer rolled: " + roll);
+    console.log("Hard computer rolled: " + roll);
     if(totalObject.playerTotal >=85){
       if(turns < (100-totalObject.playerTotal)){
         if(roll === 1){
@@ -130,8 +136,10 @@ function displayResult(){
 }
 
 $(function(){
+  var gameMode;
   $("#btnRoll").click(function(){
-    playerRoll();
+    gameMode = $('input:radio[name="difMode"]:checked').val();
+    playerRoll(gameMode);
     displayPlayerOutput();
 
   });
@@ -141,8 +149,11 @@ $(function(){
       displayResult();
     }else if (endGame()===false){
       displayPlayerOutput();
-      // easyCompRoll();
-      hardCompRoll();
+      if (gameMode === 'hard') {
+        hardCompRoll();
+      } else {
+        easyCompRoll();
+      }
       if (endGame()===true) {
         displayResult();
       }
