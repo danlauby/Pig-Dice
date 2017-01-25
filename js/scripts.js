@@ -2,20 +2,20 @@
 // If the player rolls any other number, it is added to their turn total and the player's turn continues.
 // If a player chooses to "hold", their turn total is added to their score, and it becomes the next player's turn.
 
-var turns = 0
+var turns = 0;
 var totalObject = {
       playerTurnTotal: 0,
       playerTotal: 0,
       compTurnTotal: 0,
       compTotal: 0
-    }
+    };
 
 function rolls(){
   return Math.round(Math.random() * (5) + 1);
 }
 
 var playerRoll = function(mode){
-  console.log("mode is: "+ mode);
+  console.log("player's turn on: "+ mode);
   var gameMode = mode;
   if(totalObject.playerTotal >= 100 || totalObject.compTotal >=100){
     endGame();
@@ -41,19 +41,19 @@ var easyCompRoll = function(){
     endGame();
   }else {
     var roll = rolls();
+    console.log("easy rolls is: " + roll);
     if(turns < 2){
       if(roll === 1){
         totalObject.compTurnTotal = 0;
-        endGame();
         displayCompOutput();
       }else{
         totalObject.compTurnTotal += roll;
         turns +=1;
+        displayCompOutput();
         easyCompRoll();
       }
     }else{
-        endGame();
-        displayCompOutput();
+      endGame();
       turns= 0;
     }
   }
@@ -70,16 +70,15 @@ var hardCompRoll = function(){
         if(roll === 1){
           totalObject.compTurnTotal = 0;
           endGame();
-          displayCompOutput();
         }else{
           totalObject.compTurnTotal += roll;
           turns +=1;
           hardCompRoll();
+          displayCompOutput();
         }
       }else{
-          endGame();
-          displayCompOutput();
-          turns= 0;
+        endGame();
+        turns= 0;
       }
     }else {
       if(totalObject.compTurnTotal < 20){
@@ -89,12 +88,11 @@ var hardCompRoll = function(){
           displayCompOutput();
         }else{
           totalObject.compTurnTotal += roll;
-          // turns +=1;
           hardCompRoll();
+          displayCompOutput();
         }
       }else{
           endGame();
-          displayCompOutput();
           turns= 0;
       }
     }
@@ -121,12 +119,13 @@ function displayPlayerOutput(){
 
 function displayCompOutput(){
   $(".comp-output").empty();
-  $(".comp-output").append("<h1>The Computers turn total is: "+ totalObject.compTurnTotal + "</h1>").append("<h2> The Computers overall total is: " + totalObject.compTotal+"<h2>");
+  $(".comp-output").append("<h2> The Computers overall total is: " + totalObject.compTotal+"<h2>");
 }
 
 function displayResult(){
   $("button").hide();
-  $("#displayHolder").hide();
+  $(".buttonHolder").hide();
+  $(".displayContainer").hide();
   $(".win-holder").show();
   if(totalObject.playerTotal>=100){
     $(".player-wins").show();
@@ -139,6 +138,7 @@ $(function(){
   var gameMode;
   $("#btnRoll").click(function(){
     gameMode = $('input:radio[name="difMode"]:checked').val();
+    $(".displayContainer").show();
     playerRoll(gameMode);
     displayPlayerOutput();
 
@@ -157,8 +157,6 @@ $(function(){
       if (endGame()===true) {
         displayResult();
       }
-
-      displayCompOutput();
     }
   });
 
