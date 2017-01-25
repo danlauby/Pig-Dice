@@ -14,20 +14,20 @@ function rolls(){
   return Math.round(Math.random() * (5) + 1);
 }
 
- var playerRoll = function(){
-   if(totalObject.playerTotal >= 100 || totalObject.compTotal >=100){
-     endGame();
-   }else {
-     var roll = rolls();
-     if(roll === 1){
-       totalObject.playerTurnTotal = 0;
-       endGame();
-       displayPlayerOutput();
-       easyCompRoll();
-     }else{
-       totalObject.playerTurnTotal += roll;
-     }
-   }
+var playerRoll = function(){
+  if(totalObject.playerTotal >= 100 || totalObject.compTotal >=100){
+    endGame();
+  }else {
+   var roll = rolls();
+   if(roll === 1){
+      totalObject.playerTurnTotal = 0;
+      endGame();
+      displayPlayerOutput();
+      easyCompRoll();
+   }else{
+      totalObject.playerTurnTotal += roll;
+    }
+  }
 }
 
 var easyCompRoll = function(){
@@ -49,6 +49,48 @@ var easyCompRoll = function(){
         endGame();
         displayCompOutput();
       turns= 0;
+    }
+  }
+}
+
+var hardCompRoll = function(){
+  if(totalObject.playerTotal >= 100 || totalObject.compTotal >=100){
+    endGame();
+  }else {
+    var roll = rolls();
+    console.log("computer rolled: " + roll);
+    if(totalObject.playerTotal >=85){
+      if(turns < 6){
+        if(roll === 1){
+          totalObject.compTurnTotal = 0;
+          endGame();
+          displayCompOutput();
+        }else{
+          totalObject.compTurnTotal += roll;
+          turns +=1;
+          hardCompRoll();
+        }
+      }else{
+          endGame();
+          displayCompOutput();
+          turns= 0;
+      }
+    }else {
+      if(turns < 4){
+        if(roll === 1){
+          totalObject.compTurnTotal = 0;
+          endGame();
+          displayCompOutput();
+        }else{
+          totalObject.compTurnTotal += roll;
+          turns +=1;
+          hardCompRoll();
+        }
+      }else{
+          endGame();
+          displayCompOutput();
+          turns= 0;
+      }
     }
   }
 }
@@ -99,8 +141,8 @@ $(function(){
       displayResult();
     }else if (endGame()===false){
       displayPlayerOutput();
-      easyCompRoll();
-
+      // easyCompRoll();
+      hardCompRoll();
       if (endGame()===true) {
         displayResult();
       }
@@ -109,7 +151,4 @@ $(function(){
     }
   });
 
-
-
-  // Rolls();
 });
