@@ -2,6 +2,7 @@
 // If the player rolls any other number, it is added to their turn total and the player's turn continues.
 // If a player chooses to "hold", their turn total is added to their score, and it becomes the next player's turn.
 
+var turns = 0
 var totalObject = {
       playerTurnTotal: 0,
       playerTotal: 0,
@@ -18,20 +19,46 @@ function rolls(){
   console.log(roll);
   if(roll === 1){
     totalObject.playerTurnTotal = 0;
-    //holdfunction()
+    hold();
   }else{
     totalObject.playerTurnTotal += roll;
   }
 }
 
+var hold = function(){
+  totalObject.playerTotal += totalObject.playerTurnTotal;
+  totalObject.compTotal += totalObject.compTurnTotal;
+  totalObject.playerTurnTotal = 0;
+  totalObject.compTurnTotal = 0;
+}
+
+var compRoll = function(){
+  var roll = rolls();
+  console.log(roll);
+  if(turns < 2){
+    if(roll === 1){
+      totalObject.compTurnTotal = 0;
+      hold();
+    }else{
+      totalObject.compTurnTotal += roll;
+      turns +=1
+      compRoll();
+    }
+  }else{
+    hold();
+  }
+}
+
+
+//front endvvvvvv
 $(function(){
   $("#btnRoll").click(function(){
     playerRoll();
 
   });
   $("#btnHold").click(function(){
-    // playerHold();
-    // totalObject.playerTotal += totalObject.playerTurnTotal;
+    hold();
+    compRoll();
   });
 
 
