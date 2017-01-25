@@ -20,6 +20,7 @@ function rolls(){
   if(roll === 1){
     totalObject.playerTurnTotal = 0;
     hold();
+    compRoll();
   }else{
     totalObject.playerTurnTotal += roll;
   }
@@ -41,11 +42,12 @@ var compRoll = function(){
       hold();
     }else{
       totalObject.compTurnTotal += roll;
-      turns +=1
+      turns +=1;
       compRoll();
     }
   }else{
     hold();
+    turns= 0;
   }
 }
 
@@ -54,12 +56,17 @@ var compRoll = function(){
 $(function(){
   $("#btnRoll").click(function(){
     playerRoll();
+    $(".player-output").empty();
+    $(".player-output").append("<h1>Your turn total is: "+ totalObject.playerTurnTotal + "</h1>").append("<h2> Your overall total is: " + totalObject.playerTotal+"<h2>")
 
   });
   $("#btnHold").click(function(){
     hold();
+    $(".player-output").empty();
+    $(".player-output").append("<h1>Your turn total is: "+ totalObject.playerTurnTotal + "</h1>").append("<h2> Your overall total is: " + totalObject.playerTotal+"<h2>")
     compRoll();
   });
+
 
 
   // Rolls();
