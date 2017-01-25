@@ -60,7 +60,7 @@ var hardCompRoll = function(){
     var roll = rolls();
     console.log("computer rolled: " + roll);
     if(totalObject.playerTotal >=85){
-      if(turns < 6){
+      if(turns < (100-totalObject.playerTotal)){
         if(roll === 1){
           totalObject.compTurnTotal = 0;
           endGame();
@@ -76,14 +76,14 @@ var hardCompRoll = function(){
           turns= 0;
       }
     }else {
-      if(turns < 4){
+      if(totalObject.compTurnTotal < 20){
         if(roll === 1){
           totalObject.compTurnTotal = 0;
           endGame();
           displayCompOutput();
         }else{
           totalObject.compTurnTotal += roll;
-          turns +=1;
+          // turns +=1;
           hardCompRoll();
         }
       }else{
