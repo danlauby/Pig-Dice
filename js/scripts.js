@@ -19,7 +19,6 @@ function rolls(){
      endGame();
    }else {
      var roll = rolls();
-     console.log(roll);
      if(roll === 1){
        totalObject.playerTurnTotal = 0;
        endGame();
@@ -36,7 +35,6 @@ var easyCompRoll = function(){
     endGame();
   }else {
     var roll = rolls();
-    console.log(roll);
     if(turns < 2){
       if(roll === 1){
         totalObject.compTurnTotal = 0;
@@ -56,15 +54,7 @@ var easyCompRoll = function(){
 }
 
 var endGame = function(){
-  if(totalObject.playerTotal >= 100){
-    alert("YOU WIN!!!");
-    // $(".btnHold").off();
-    // $(".btnRoll").off();
-    return true;
-  }else if(totalObject.compTotal >=100){
-    alert("You lose.");
-    // $(".btnHold").off();
-    // $(".btnRoll").off();
+  if(totalObject.playerTotal >= 100 || totalObject.compTotal >=100){
     return true;
   }else {
     totalObject.playerTotal += totalObject.playerTurnTotal;
@@ -86,6 +76,8 @@ function displayCompOutput(){
   $(".comp-output").append("<h1>The Computers turn total is: "+ totalObject.compTurnTotal + "</h1>").append("<h2> The Computers overall total is: " + totalObject.compTotal+"<h2>");
 }
 
+// function doTheRoll(){}
+
 $(function(){
   $("#btnRoll").click(function(){
     playerRoll();
@@ -93,7 +85,18 @@ $(function(){
 
   });
   $("#btnHold").click(function(){
-    if (!endGame()) {
+    endGame();
+    if (endGame()===true) {
+      $("button").hide();
+      $("#displayHolder").hide();
+      $(".win-holder").show();
+      if(totalObject.playerTotal>=100){
+        $(".player-wins").show();
+      }else if(totalObject.compTotal>=100){
+        $(".comp-wins").show();
+      }
+    }else if (endGame()===false){
+      console.log("stuff");
       displayPlayerOutput();
       easyCompRoll();
       displayCompOutput();
