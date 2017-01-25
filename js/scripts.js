@@ -20,51 +20,89 @@ function rolls(){
   if(roll === 1){
     totalObject.playerTurnTotal = 0;
     hold();
-    compRoll();
+    displayPlayerOutput();
+    easyCompRoll();
   }else{
     totalObject.playerTurnTotal += roll;
   }
 }
 
 var hold = function(){
-  totalObject.playerTotal += totalObject.playerTurnTotal;
-  totalObject.compTotal += totalObject.compTurnTotal;
-  totalObject.playerTurnTotal = 0;
-  totalObject.compTurnTotal = 0;
+  if(!endGame()){
+    totalObject.playerTotal += totalObject.playerTurnTotal;
+    totalObject.compTotal += totalObject.compTurnTotal;
+    totalObject.playerTurnTotal = 0;
+    totalObject.compTurnTotal = 0;
+  }else{
+    return false;
+  }
 }
 
-var compRoll = function(){
+var easyCompRoll = function(){
   var roll = rolls();
   console.log(roll);
   if(turns < 2){
     if(roll === 1){
       totalObject.compTurnTotal = 0;
       hold();
+      displayCompOutput();
     }else{
       totalObject.compTurnTotal += roll;
       turns +=1;
-      compRoll();
+      easyCompRoll();
     }
   }else{
-    hold();
+    endGame();
+    if(!hold()){
+      displayCompOutput();
+    }
     turns= 0;
   }
 }
 
+var endGame = function(){
+  if(totalObject.playerTotal >= 100){
+    alert("YOU WIN!!!")
+    // $(".btnHold").off();
+    // $(".btnRoll").off();
+    return true;
+  }else if(totalObject.compTotal >=100){
+    alert("You lose.")
+    // $(".btnHold").off();
+    // $(".btnRoll").off();
+    return true;
+  }else {
+    return false;
+  }
+}
 
 //front endvvvvvv
+function displayPlayerOutput(){
+  $(".player-output").empty();
+  $(".player-output").append("<h1>Your turn total is: "+ totalObject.playerTurnTotal + "</h1>").append("<h2> Your overall total is: " + totalObject.playerTotal+"<h2>");
+}
+
+function displayCompOutput(){
+  $(".comp-output").empty();
+  $(".comp-output").append("<h1>The Computers turn total is: "+ totalObject.compTurnTotal + "</h1>").append("<h2> The Computers overall total is: " + totalObject.compTotal+"<h2>");
+}
+
+function killButtons(){
+
+}
+
 $(function(){
   $("#btnRoll").click(function(){
     playerRoll();
-    $(".player-output").empty();
-    $(".player-output").append("<h1>Your turn total is: "+ totalObject.playerTurnTotal + "</h1>").append("<h2> Your overall total is: " + totalObject.playerTotal+"<h2>")
+    displayPlayerOutput();
 
   });
   $("#btnHold").click(function(){
-    hold();
-    $(".player-output").empty();
-    $(".player-output").append("<h1>Your turn total is: "+ totalObject.playerTurnTotal + "</h1>").append("<h2> Your overall total is: " + totalObject.playerTotal+"<h2>")
-    compRoll();
+    if(!hold()){
+      displayPlayerOutput();
+      easyCompRoll();
+      displayCompOutput();
+    }
   });
 
 
